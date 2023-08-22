@@ -1,4 +1,6 @@
-# jmoliveira92.github.io
+# Joao Data Journey
+
+# Project A - Business Dashboard
 
 [Click here to view the Power BI report](https://app.powerbi.com/reportEmbed?reportId=392aeb58-2460-4ae1-b418-f14771110c56&autoAuth=true&ctid=d05d4c80-da1e-4cd7-83a6-0d2094b20418)
 
