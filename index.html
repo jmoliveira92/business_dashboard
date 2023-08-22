@@ -30,7 +30,81 @@
 
   <p>The previous step of my work was the creation and implementation of automated strategic data gathering procedures in order to create an efficient Data Model. However, due to their length, these procedures will not be detailed in this document.</p>
 
-  <!-- More content can be added here -->
+<h2>3. Concepts & Methodology</h2>
+
+  <p>There are some concepts associated with the industry (i.e. construction) and others related to the conception of the model.</p>
+
+  <ul>
+    <li><strong>Types of projects (3)</strong>: Residential, Industrial and Utility Scale.</li>
+  </ul>
+
+  <p><strong>Measure Revenue & % Ejecution:</strong> since any project has a “Nº of Budget Hours” (means, the working hours that we must invest into the project), the Administration requires the REVENUE to be measured on a daily basis (“daily_revenue”), according to the “Daily Worked Hours”. To understand this concept, it is important to distinguish two (2) different ways to measure the revenue:</p>
+
+  <ul>
+    <li>Residential Projects: You measure in a way that if you surpass the “budget hours”, you are in loss, OR if the team finishes earlier, you are in profit (of course, we must add the remaining costs, such as the cost of travel, some invoice from material).</li>
+    <li>Industrial and Utility Scale Projects: This type of projects can last weeks or even months, and to measure the revenue you must create a process based on tasks performed and the time it takes to complete each task, varying with the number of workers involved in the project (which may vary over the course of days). I like to think like a “Loading bar/Progress bar” like when you are charging a battery. For example, if a utility scale PV system has 100 “tables” (and each table has 60 PV modules), we are not mounting each table from beginning to end, because we must excel in the mounting process. First we will mount the “pile driving” of all tables. Then we will assemble all the frames, then all the crossbeam, then all the straps, etc. Therefore, with this methodology, we can measure the “% Theoric Progress” VS “% Actual Progress” and the “Theoric Daily Revenue (€)” VS “Actual Daily Revenue (€)” for each project (I don’t detail that spreadsheet here in this document).</li>
+  </ul>
+
+<h3>Travel Costs</h3>
+  <p>The company has some vehicles. The invoices from Gas and Renting from the Leasing Company for those vehicles are billed on a monthly basis. You can easily calculate the "Daily Renting Amount" for each vehicle; however, the issue is the "GAS" bought through the Leasing Gas Card because it does not detail which vehicle uses it. The goal is to allow us to impute each cost to the certain project on a daily basis. Therefore, you can't impute the Leasing Card to a certain vehicle, but you can make an estimation of the distance each vehicle had traveled each day (using GPS trackers, for example) and the consumption of each vehicle. Due to these reasons, the administration chose to install GPS trackers to track the vehicles' distance route/cost and "eliminate" (from the "Operational Accounting") the invoices from the Leasing Company. The cost of the vehicle is calculated as = cost renting/per day + cost of km’s. For that, we have created a separated sheet that imports the GPS distance and multiplies it by the gas oil price (always superior to allow us to have some margin) and the consumption of each vehicle (roughly 13L/100 km). For this reason, we must "eliminate" from our Accounting sheet the costs of this particular supplier (Leasing Company).</p>
+
+  <h3>Track Specific Operational Costs</h3>
+  <p>To track all operational specific costs of a project, I used a "unique key" called "ProjectCode". This way I can map all specific costs, such as the worker cost time, invoices, travels, etc. For example:</p>
+  <ul>
+    <li>Work entrance in the fLabor_force (time worked by each employee in a day) must have a ProjectCode (simply join/merge the Work_Schedule_Calendar with the fLabor_force using the key "emp_id").</li>
+    <li>Invoices in fAccounting table have to have a ProjectCode.</li>
+    <li>Every "travel" (the way the workers move to the project location) must have a ProjectCode identifier.</li>
+  </ul>
+
+  <h3>Track Non-Specific Operational Costs</h3>
+  <p>What happens if there is an invoice (like "tools") that we cannot impute to a specific Project? In the cases related to operational costs that are not associated with any specific project, I choose to use the ProjectCode called "G001". Then we must calculate the "effort ratio" (=time) dedicated on each project on each month and impute proportionally to each project. This way we can find the "real costs" of any project.</p>
+
+  <h3>Workers Time Cost ("Cost Worked Hours")</h3>
+  <p>It is important to calculate the net cost of each worker, i.e. the company cost. The cost per hour per worker is dynamic and can vary every month. There are some details that are important to mention:</p>
+  <ul>
+    <li>Every employee has a "job_category", which means each employee has an annual salary, depending on the job category.</li>
+    <li>Each time an employee goes to work, the employee receives 5€/day per assistance (according to the Company-Union Agreement).</li>
+    <li>Some employees can receive "Team Bonus" for having the responsibility of managing the team on site and reporting to the operations department. The value varies each month depending on some performance parameters.</li>
+    <li>Also, some teams receive a "productivity bonus" based on the great work they have provided. This value varies monthly (a team leader can receive both bonuses in the same month).</li>
+    <li>The salary is under the social security tax of 37%. That means that for paying 100€ to the employee, the company expense is 137,00€ (excluding "assistance").</li>
+    <li>The Company-Union Agreement establishes that each worker SHOULD work not more than 1760h/year. This value is not mandatory but it is advisable to not overload the workers.</li>
+  </ul>
+
+  <p>In summary, the way to calculate the total cost of a Project is an arithmetic sum of:</p>
+  <ul>
+    <li>Workers Cost</li>
+    <li>Costs in general (= invoices, such as material expenses, accommodation, food), etc</li>
+    <li>Travels: the number of travels and the costs of gas (overestimation)</li>
+    <li>Proportional "G001" Costs</li>
+  </ul>
+
+<h2>4. Data Modeling</h2>
+  <p>Based on the methodology presented in the previous chapter, the Data Model has the structure presented below. We must notice that there are several “Fact Tables”; nonetheless, the relationships in the Data Model are aiming to respect the “Star Schema” in order to maintain the reliability of the model.</p>
+
+  <h3>Dimensional Tables:</h3>
+  <ol>
+    <li>dCalendar (full calendar included the Company-Union Agreement holidays)</li>
+    <li>dLocation/Geography</li>
+    <li>dProjectCode</li>
+    <li>dEmployee</li>
+    <li>dVendor_ID</li>
+  </ol>
+
+  <h3>Fact Tables:</h3>
+  <ol>
+    <li>fAccounting</li>
+    <li>fLabor_time (shows the time worked per day per employee. Also merged the “WorkSchedule Calendar” that shows where each employee was on that day = using the ProjectCode unique key)</li>
+    <li>fRevenue_daily</li>
+    <li>fSalaries (backoffice)</li>
+    <li>fTravels_daily</li>
+  </ol>
+
+  <h2>5. Conclusions</h2>
+  <p>Comparing the different types of projects, we can conclude some preliminary deductions:</p>
+  <ul>
+    <li>Projects with several Megawatts are very competitive (because there are many companies building the site at the same time, competing) and the probability of uncertain events (such as rainy days, logistical delays) are greater.</li>
+    <li>The most profitable projects were “industrial” (between 50-150 kWp) and “Utility Scale” projects less than 500 kWP)</li>
+  </ul>
 
 </body>
 </html>
