@@ -14,6 +14,12 @@
 > will enable the company to make informed decisions and drive the
 > business towards success.
 
+
+<iframe width="800" height="600" src="<iframe title="Business Dashboard" width="1140" height="541.25" src="https://app.powerbi.com/reportEmbed?reportId=392aeb58-2460-4ae1-b418-f14771110c56&autoAuth=true&ctid=d05d4c80-da1e-4cd7-83a6-0d2094b20418" frameborder="0" allowFullScreen="true"></iframe>"></iframe>
+
+
+
+
 2.  The Problem - Clarification Questions
 
 > The Board of Direction (= company’s admistration) needs a solution
