@@ -27,10 +27,10 @@
 > To accomplish this task, I must to build a business/operational
 > dashboard that allows:
 
-    1.  They want to know how is going the business (detail costs, revenue,
++ 1. They want to know how is going the business (detail costs, revenue,
     profits, etc)
-    2.  Be possible to analyze each project in detail.
-    3.  Understand operativelly where we are competitive and where we are
++ 2.  Be possible to analyze each project in detail.
++ 3.  Understand operativelly where we are competitive and where we are
     not.
 
 > The start point of my journey: the company only have a a time_logging
