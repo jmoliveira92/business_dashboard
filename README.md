@@ -9,7 +9,7 @@
 
 ## 1.  Introduction
 
-This project is a result of my learning process as a Data/Business Analyst from the lat year also and the knowledge I have adquired in businesses during the last 7 years.
+This project is a result of my learning process as a Data/Business Analyst from the last year also and the knowledge I have acquired in businesses during the last 7 years.
 The project is a real-case and aims to assist a new company who needs to understand the photovoltaic industry and identifying their strenghts and weaknesses. We must be able to operate and assess our performance in a timely and efficient manner. By analyzing our operations, we can identify areas where we excel and where we may need improvement, allowing us to adjust our strategies and investments accordingly. The ultimate goal is to provide actionable insights that will enable the company to make informed decisions and drive the business towards success.
 
 ## 2.  The Problem - Clarification Questions
